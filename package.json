@@ -1,0 +1,19 @@
+{
+  "name": "what-time-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "botbuilder": "^3.15.0",
+    "dotenv-extended": "^2.0.0",
+    "request": "^2.88.0",
+    "restify": "^7.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ASC LAB",
+  "license": "Apache 2.0"
+}
