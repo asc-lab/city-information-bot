@@ -37,6 +37,54 @@ function getSteps() {
         function (session, results, next) {
             session.send('Hello in ASC LAB What Time Bot!');
             next();
+        },
+        function (session) {
+            builder.Prompts.choice(
+                session,
+                'Please choose one of the most popular cities or choose "Other..." if you ask about another.',
+                ['Warsaw', 'London', 'New York', 'Berlin', 'Other...'],
+                {
+                    maxRetries: 3,
+                    retryPrompt: 'Not a valid option'
+                });
+        },
+        function (session, result) {
+            if (!result.response) {
+                session.send('Ooops! Too many attemps :( Try again!');
+                session.endDialog();
+            }
+
+            session.on('error', function (err) {
+                session.send('Failed with message: %s', err.message);
+                session.endDialog();
+            });
+
+            const selection = result.response.entity;
+            if (selection === 'Other...') {
+                session.beginDialog('custom-city');
+            } else {
+                backend.getTimeFor(selection).then(function (time) {
+                    session.send(`Time for ${selection} is: ${time}`);
+                    session.endDialog();
+                });
+            }
         }
+    ];
+}
+
+bot.dialog('custom-city', getCustomCitySteps());
+
+function getCustomCitySteps() {
+    return [
+        function (session) {
+            builder.Prompts.text(session, 'Please type city:');
+        },
+        function (session, results) {
+            let selection = results.response;
+            backend.getTimeFor(selection).then(function (time) {
+                session.send(`Time for ${selection} is: ${time}`);
+                session.endDialog();
+            });
+        },
     ];
 }
