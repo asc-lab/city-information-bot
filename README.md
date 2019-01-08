@@ -5,6 +5,7 @@ This bot is build with [**Bot Builder SDK (Microsoft Bot Framework) v3**](https:
 
 
 ## Prerequisites
+* On your Google Account, you should run two services: `Time Zone API` and `Geocoding API`.
 * ```.env``` file based on ```.env-example```.
 ```
 MICROSOFT_APP_ID=
