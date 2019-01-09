@@ -7,9 +7,9 @@ This bot is build with [**Bot Builder SDK (Microsoft Bot Framework) v3**](https:
 Application is integrated with http://history.openweathermap.org and is now able to provide you with weather information about selected city.
 
 ## Prerequisites
-* A Google maps api key. Currently google cloud account have a free trial (this might change). Learn how to get started [**here**] (https://developers.google.com/maps/documentation/javascript/get-api-key).
+* A Google maps api key. Currently google cloud account have a free trial (this might change). Learn how to get started with [**Google documentation**](https://developers.google.com/maps/documentation/javascript/get-api-key).
 * Geocoding Api and Time Zone API in your google cloud account should be enabled.
-* An Open Weather Map api key. You can get it for free [**here**] (https://home.openweathermap.org/users/sign_in).
+* An Open Weather Map api key. You can get it for free on [**Open Weather Map home website**](https://home.openweathermap.org/users/sign_in).
 * ```.env``` file based on ```.env-example```. You should replace YOUR_KEY with your google cloud api key and YOUR_WEATHER_KEY with Open Weather Map api key.
 ```
 MICROSOFT_APP_ID=
