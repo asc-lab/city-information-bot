@@ -63,8 +63,13 @@ function getSteps() {
             if (selection === 'Other...') {
                 session.beginDialog('custom-city');
             } else {
+                //FIXME make it DRY
                 backend.getTimeFor(selection).then(function (time) {
                     session.send(`Time for ${selection} is: ${time}`);
+                    session.endDialog();
+                });
+                backend.getWeather(selection).then(function(weather){
+                    session.send(`Detailed weather information for ${selection}: ${weather}`);
                     session.endDialog();
                 });
             }
@@ -81,8 +86,13 @@ function getCustomCitySteps() {
         },
         function (session, results) {
             let selection = results.response;
+            //FIXME make it DRY
             backend.getTimeFor(selection).then(function (time) {
                 session.send(`Time for ${selection} is: ${time}`);
+                session.endDialog();
+            });
+            backend.getWeather(selection).then(function(weather){
+                session.send(`Detailed weather information for ${selection} is: ${weather}`);
                 session.endDialog();
             });
         },
