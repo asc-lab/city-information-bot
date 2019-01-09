@@ -1,9 +1,13 @@
 function getTimeFor() {
-    return new Date().toLocaleDateString('pl');
+    return new Promise(function (resolve) {
+        return resolve(new Date().toLocaleDateString('pl'));
+    });
 }
 
 function getWeather(){
-    return "The weather is always fine";
+    return new Promise(function (resolve){
+        return resolve("The weather is always fine");
+    });
 }
 
 module.exports = {
