@@ -16,6 +16,16 @@ function getWeather(city) {
     });
 }
 
+function getTimeAndWeather(city){
+    return _getGeoFor(city).then(function (geometry) {
+        return Promise.all([_getTimeFor(geometry), _getWeatherFor(geometry)]).then(function(values) {
+            return {
+                time: values[0],
+                weather: values[1]
+            }
+        });
+    })
+}
 
 function _getGeoFor(city) {
     return new Promise(function (resolve, reject) {
@@ -40,6 +50,7 @@ function _getGeoFor(city) {
 
 function _getTimeFor(geoInfo) {
     return new Promise(function (resolve, reject) {
+        console.log(geoInfo);
         let location = geoInfo.geometry.location.lat + "," + geoInfo.geometry.location.lng;
         let zoneUrl = TIMEZONE_API_URL.replace('REPLACE_THIS', location);
 
@@ -110,5 +121,6 @@ function toString(weatherInfo) {
 
 module.exports = {
     getTimeFor: getTime,
-    getWeather: getWeather
+    getWeather: getWeather,
+    getTimeAndWeather: getTimeAndWeather
 };

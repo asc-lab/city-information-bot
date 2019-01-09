@@ -10,7 +10,17 @@ function getWeather(){
     });
 }
 
+function getTimeAndWeather(){
+    return Promise.all([getTimeFor(), getWeather()]).then(function (values) {
+        return {
+            time: values[0],
+            weather: values[1]
+        }
+    });
+}
+
 module.exports = {
     getTimeFor: getTimeFor,
-    getWeather: getWeather
+    getWeather: getWeather,
+    getTimeAndWeather: getTimeAndWeather
 };

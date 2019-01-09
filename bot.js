@@ -63,15 +63,7 @@ function getSteps() {
             if (selection === 'Other...') {
                 session.beginDialog('custom-city');
             } else {
-                //FIXME make it DRY
-                backend.getTimeFor(selection).then(function (time) {
-                    session.send(`Time for ${selection} is: ${time}`);
-                    session.endDialog();
-                });
-                backend.getWeather(selection).then(function(weather){
-                    session.send(`Detailed weather information for ${selection}: ${weather}`);
-                    session.endDialog();
-                });
+                sendTimeAndWeatherInformation(session, selection);
             }
         }
     ];
@@ -85,16 +77,15 @@ function getCustomCitySteps() {
             builder.Prompts.text(session, 'Please type city:');
         },
         function (session, results) {
-            let selection = results.response;
-            //FIXME make it DRY
-            backend.getTimeFor(selection).then(function (time) {
-                session.send(`Time for ${selection} is: ${time}`);
-                session.endDialog();
-            });
-            backend.getWeather(selection).then(function(weather){
-                session.send(`Detailed weather information for ${selection} is: ${weather}`);
-                session.endDialog();
-            });
+            sendTimeAndWeatherInformation(session, results.response);
         },
     ];
+}
+
+function sendTimeAndWeatherInformation(session, city){
+    backend.getTimeAndWeather().then(function (information){
+        session.send(`Time for ${city} is: ${information.time}`);
+        session.send(`Detailed weather information for ${city} is: ${information.weather}`);
+        session.endDialog();
+    });
 }
