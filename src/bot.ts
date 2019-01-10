@@ -24,9 +24,8 @@ export class MyBot {
     private static readonly TYPE_CITY_ID = 'typeCityPrompt';
     private static readonly PARENT_DIALOG_ID = 'cityInformationDialog';
     private static readonly DIALOG_STATE_PROPERTY = 'dialogState';
-    private static readonly CITY_NAME_PROPERTY = 'cityName';
 
-    private readonly timeAndWeatherService: ITimeAndWeatherService = process.env.MOCK_BACKEND === 'true' ? new MockTimeAndWeatherService() : new TimeAndWeatherService(); // FIXME concrete implementation
+    private readonly timeAndWeatherService: ITimeAndWeatherService = process.env.MOCK_BACKEND === 'true' ? new MockTimeAndWeatherService() : new TimeAndWeatherService();
 
     private readonly dialogState: StatePropertyAccessor;
     private dialogs: DialogSet;
