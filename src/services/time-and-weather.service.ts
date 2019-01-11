@@ -1,6 +1,7 @@
 import * as request from 'request';
 import {ITimeAndWeatherService} from './i-time-and-weather.service';
 import {TimeAndWeatherResponse} from './time-and-weather.response';
+import {Weather} from "../model/Weather";
 
 export class TimeAndWeatherService implements ITimeAndWeatherService {
 
@@ -19,14 +20,14 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
 
     public getTimeAndWeatherFor(city: string): Promise<TimeAndWeatherResponse> {
         return this._getGeoFor(city).then((geometry) => {
-        const promises = [this._getTimeFor(geometry), this._getWeatherFor(geometry)];
-        return Promise.all(promises).then((results: string[]) => {
-                return new TimeAndWeatherResponse(results[0], results[1]);
-            },
-            (reason) => {
-                console.log(reason);
-                return new TimeAndWeatherResponse('', '' );
-            });
+            const promises = [this._getTimeFor(geometry), this._getWeatherFor(geometry)];
+            return Promise.all(promises).then((results: string[]) => {
+                    return new TimeAndWeatherResponse(results[0], results[1]);
+                },
+                (reason) => {
+                    console.log(reason);
+                    return new TimeAndWeatherResponse('', '');
+                });
         });
     }
 
@@ -62,7 +63,7 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
                     if (error) {
                         reject(error);
                     } else {
-                        const time = new Date().toLocaleString('pl', JSON.parse(body).timeZoneId);
+                        const time = new Date().toLocaleString('en', {timeZone: JSON.parse(body).timeZoneId});
                         resolve(time);
                     }
                 }
@@ -83,30 +84,11 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
                     if (error) {
                         reject(error);
                     } else {
-                        const weatherInfo = JSON.parse(body); // FIXME define this object (also method toString should be on it)
-                        resolve(this.toString(weatherInfo));
+                        const weather: Weather = Object.assign(new Weather(), JSON.parse(body));
+                        resolve(weather.printInfo());
                     }
                 }
             );
         });
     }
-
-    private toString(weatherInfo: any): string {
-        const msg = '\n\r Minimum temperature in the city is MIN_TEMP °C ' +
-            '\n\r Maximum temperature in the city is MAX_TEMP °C ' +
-            '\n\r Preassure is PREASS hPa ' +
-            '\n\r Humididy is HUMID % ' +
-            '\n\r Wind speed is WIND_SPEED m/s ' +
-            '\n\r Wind direction is WIND_DIR ° ' +
-            '\n\r Cloudiness is CLOUDI % ';
-        return msg
-            .replace('MIN_TEMP', weatherInfo.main.temp_min)
-            .replace('MAX_TEMP', weatherInfo.main.temp_max)
-            .replace('PREASS', weatherInfo.main.temp_max)
-            .replace('HUMID', weatherInfo.main.humidity)
-            .replace('WIND_SPEED', weatherInfo.wind.speed)
-            .replace('WIND_DIR', weatherInfo.wind.deg)
-            .replace('CLOUDI', weatherInfo.clouds.all);
-    }
-
 }

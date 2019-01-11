@@ -25,7 +25,10 @@ export class MyBot {
     private static readonly PARENT_DIALOG_ID = 'cityInformationDialog';
     private static readonly DIALOG_STATE_PROPERTY = 'dialogState';
 
-    private readonly timeAndWeatherService: ITimeAndWeatherService = process.env.MOCK_BACKEND === 'true' ? new MockTimeAndWeatherService() : new TimeAndWeatherService();
+    private readonly timeAndWeatherService: ITimeAndWeatherService =
+        process.env.MOCK_BACKEND === 'true'
+            ? new MockTimeAndWeatherService()
+            : new TimeAndWeatherService();
 
     private readonly dialogState: StatePropertyAccessor;
     private dialogs: DialogSet;
@@ -74,8 +77,8 @@ export class MyBot {
     private async respondToUser(turnContext: TurnContext) {
         const dc = await this.dialogs.createContext(turnContext);
         if (!turnContext.responded) {
-            await dc.continueDialog().then((dialogResulst) => {
-                if (dialogResulst.status === DialogTurnStatus.empty) {
+            await dc.continueDialog().then((dialogResult) => {
+                if (dialogResult.status === DialogTurnStatus.empty) {
                     return dc.beginDialog(MyBot.PARENT_DIALOG_ID)
                         .then((dialogResult) => {
                             console.log(`New dialog started, current status is ${dialogResult.status}`);
