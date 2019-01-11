@@ -1,7 +1,7 @@
 # What time is it?
 Chatbot that can answer the question: "What time is in Chicago (or any other city)"?
 
-This bot is build with [**Bot Builder SDK (Microsoft Bot Framework) v3**](https://github.com/Microsoft/BotBuilder).
+This bot is build with [**Bot Builder SDK (Microsoft Bot Framework) v4**](https://github.com/Microsoft/BotBuilder).
 
 # Extra features
 Application is integrated with http://history.openweathermap.org and is now able to provide you with weather information about selected city.
