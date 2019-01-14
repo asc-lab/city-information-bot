@@ -1,10 +1,10 @@
-# What time is it and what is the weather like?
+# What time is it and what is the weather like in Chicago?
 
 <p align="center">
     <img alt="Bot" src="https://raw.githubusercontent.com/asc-lab/what-time-is-it-bot/master/readme-images/bot_with_weather.gif" />
 </p>
 
-Chatbot that can answer the question: "What time is it and what is the weather like (or any other city)"?
+Chatbot that can answer the question: "What time is it and what is the weather like  in Chicago (or any other city)"?
 
 This bot is build with [**Bot Builder SDK (Microsoft Bot Framework) v4**](https://github.com/Microsoft/BotBuilder).
 
