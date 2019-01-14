@@ -1,5 +1,9 @@
 # What time is it and what is the weather like?
 
+<p align="center">
+    <img alt="Bot" src="https://raw.githubusercontent.com/asc-lab/what-time-is-it-bot/master/readme-images/bot_with_weather.gif" />
+</p>
+
 Chatbot that can answer the question: "What time is it and what is the weather like (or any other city)"?
 
 This bot is build with [**Bot Builder SDK (Microsoft Bot Framework) v4**](https://github.com/Microsoft/BotBuilder).
@@ -40,9 +44,3 @@ npm install
 npm run start
 ```
 Run [Microsoft Bot Framework Emulator](https://github.com/Microsoft/BotFramework-Emulator/releases), open **city-information-bot.bot** file from this repo in emulator and enjoy.
-
-## Example
-
-<p align="center">
-    <img alt="Bot" src="https://raw.githubusercontent.com/asc-lab/what-time-is-it-bot/master/readme-images/bot_with_weather.gif" />
-</p>
