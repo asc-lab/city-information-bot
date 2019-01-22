@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
 import {ActivityTypes, ConversationState, TurnContext} from 'botbuilder';
 import {StatePropertyAccessor} from 'botbuilder-core';
 import {
@@ -14,24 +11,24 @@ import {
 import * as _ from 'underscore';
 import {isNullOrUndefined} from 'util';
 import {ITimeAndWeatherService} from './services/i-time-and-weather.service';
-import {MockTimeAndWeatherService} from './services/mock-time-and-weather.service';
 import {TimeAndWeatherService} from './services/time-and-weather.service';
+import {MockTimeAndWeatherService} from "./services/mock-time-and-weather.service";
 
 export class MyBot {
 
-    private static readonly CITY_OPTIONS = ['Warsaw', 'London', 'New York', 'Berlin', 'Other'];
-    private static readonly CHOOSE_CITY_DIALOG_ID = 'chooseCityPrompt';
-    private static readonly TYPE_CITY_ID = 'typeCityPrompt';
-    private static readonly PARENT_DIALOG_ID = 'cityInformationDialog';
+    private readonly dialogState: StatePropertyAccessor;
+    private dialogs: DialogSet;
+
     private static readonly DIALOG_STATE_PROPERTY = 'dialogState';
+    private static readonly PARENT_DIALOG_ID = 'cityInformationDialog';
+    private static readonly CHOOSE_CITY_DIALOG_ID = 'chooseCityPrompt';
+    private static readonly CITY_OPTIONS = ['Warsaw', 'London', 'New York', 'Berlin', 'Other'];
+    private static readonly TYPE_CITY_ID = 'typeCityPrompt';
 
     private readonly timeAndWeatherService: ITimeAndWeatherService =
         process.env.MOCK_BACKEND === 'true'
             ? new MockTimeAndWeatherService()
             : new TimeAndWeatherService();
-
-    private readonly dialogState: StatePropertyAccessor;
-    private dialogs: DialogSet;
 
     constructor(private conversationState: ConversationState) {
         this.dialogState = this.conversationState.createProperty(MyBot.DIALOG_STATE_PROPERTY);

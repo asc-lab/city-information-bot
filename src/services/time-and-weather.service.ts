@@ -7,7 +7,6 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
 
     public getTimeFor(city: string): Promise<string> {
         return this._getGeoFor(city).then((geometry) => {
-            console.log(geometry);
             return this._getTimeFor(geometry);
         });
     }
@@ -20,11 +19,17 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
 
     public getTimeAndWeatherFor(city: string): Promise<TimeAndWeatherResponse> {
         return this._getGeoFor(city).then((geometry) => {
-            const promises = [this._getTimeFor(geometry), this._getWeatherFor(geometry)];
-            return Promise.all(promises).then((results: string[]) => {
+
+            const promises = [
+                this._getTimeFor(geometry),
+                this._getWeatherFor(geometry)
+            ];
+
+            return Promise.all(promises).then(
+                (results: string[]) => {
                     return new TimeAndWeatherResponse(results[0], results[1]);
                 },
-                (reason) => {
+                (reason) => { //error
                     console.log(reason);
                     return new TimeAndWeatherResponse('', '');
                 });
@@ -33,6 +38,7 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
 
     private _getGeoFor(city: string): Promise<any> { // FIXME declare a response
         const geoUrl = process.env.GEOCODE_API_URL.replace('REPLACE_THIS', city);
+
         return new Promise((resolve, reject) => {
             return request.get(
                 geoUrl,
@@ -53,6 +59,7 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
     private _getTimeFor(geoInfo: any): Promise<string> {
         const location = geoInfo.geometry.location.lat + ',' + geoInfo.geometry.location.lng;
         const zoneUrl = process.env.TIMEZONE_API_URL.replace('REPLACE_THIS', location);
+
         return new Promise((resolve, reject) => {
             return request.get(
                 zoneUrl,
@@ -74,6 +81,7 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
     private _getWeatherFor(geoInfo: any): Promise<string> {
         const location = 'lat=' + geoInfo.geometry.location.lat + '&lon=' + geoInfo.geometry.location.lng;
         const weatherUrl = process.env.OPENWEATHERMAP_GEOMETRY_URL.replace('REPLACE_THIS', location);
+
         return new Promise((resolve, reject) => {
             return request.get(
                 weatherUrl,
