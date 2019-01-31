@@ -1,39 +1,36 @@
 import * as request from 'request';
-import {ITimeAndWeatherService} from './i-time-and-weather.service';
-import {TimeAndWeatherResponse} from './time-and-weather.response';
-import {Weather} from "../model/Weather";
+import { ITimeAndWeatherService } from './i-time-and-weather.service';
+import { TimeAndWeatherResponse } from './time-and-weather.response';
+import { Weather } from '../model/Weather';
 
 export class TimeAndWeatherService implements ITimeAndWeatherService {
 
-    public getTimeFor(city: string): Promise<string> {
-        return this._getGeoFor(city).then((geometry) => {
-            return this._getTimeFor(geometry);
-        });
+    public async getTimeFor(city: string): Promise<string> {
+        const geometry = await this._getGeoFor(city);
+        return this._getTimeFor(geometry);
     }
 
-    public getWeatherFor(city: string): Promise<string> {
-        return this._getGeoFor(city).then((geometry) => {
-            return this._getWeatherFor(geometry);
-        });
+    public async getWeatherFor(city: string): Promise<string> {
+        const geometry = await this._getGeoFor(city);
+        return this._getWeatherFor(geometry);
     }
 
-    public getTimeAndWeatherFor(city: string): Promise<TimeAndWeatherResponse> {
-        return this._getGeoFor(city).then((geometry) => {
+    public async getTimeAndWeatherFor(city: string): Promise<TimeAndWeatherResponse> {
+        const geometry = await this._getGeoFor(city);
 
-            const promises = [
-                this._getTimeFor(geometry),
-                this._getWeatherFor(geometry)
-            ];
+        const promises = [
+            this._getTimeFor(geometry),
+            this._getWeatherFor(geometry)
+        ];
 
-            return Promise.all(promises).then(
-                (results: string[]) => {
-                    return new TimeAndWeatherResponse(results[0], results[1]);
-                },
-                (reason) => { //error
-                    console.log(reason);
-                    return new TimeAndWeatherResponse('', '');
-                });
-        });
+        return Promise.all(promises).then(
+            (results: string[]) => {
+                return new TimeAndWeatherResponse(results[0], results[1]);
+            },
+            (reason) => { // error
+                console.log(reason);
+                return new TimeAndWeatherResponse('', '');
+            });
     }
 
     private _getGeoFor(city: string): Promise<any> { // FIXME declare a response
@@ -43,7 +40,7 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
             return request.get(
                 geoUrl,
                 {
-                    headers: {'content-type': 'application/json'}
+                    headers: { 'content-type': 'application/json' }
                 },
                 (error, response, body) => {
                     if (error) {
@@ -64,13 +61,13 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
             return request.get(
                 zoneUrl,
                 {
-                    headers: {'content-type': 'application/json'}
+                    headers: { 'content-type': 'application/json' }
                 },
                 (error, response, body) => {
                     if (error) {
                         reject(error);
                     } else {
-                        const time = new Date().toLocaleString('en', {timeZone: JSON.parse(body).timeZoneId});
+                        const time = new Date().toLocaleString('en', { timeZone: JSON.parse(body).timeZoneId });
                         resolve(time);
                     }
                 }
@@ -86,7 +83,7 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
             return request.get(
                 weatherUrl,
                 {
-                    headers: {'content-type': 'application/json'}
+                    headers: { 'content-type': 'application/json' }
                 },
                 (error, response, body) => {
                     if (error) {

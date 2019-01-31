@@ -1,5 +1,5 @@
-import {ActivityTypes, ConversationState, TurnContext} from 'botbuilder';
-import {StatePropertyAccessor} from 'botbuilder-core';
+import { ActivityTypes, ConversationState, TurnContext } from 'botbuilder';
+import { StatePropertyAccessor } from 'botbuilder-core';
 import {
     ChoicePrompt,
     DialogSet,
@@ -9,21 +9,21 @@ import {
     WaterfallStepContext
 } from 'botbuilder-dialogs';
 import * as _ from 'underscore';
-import {isNullOrUndefined} from 'util';
-import {ITimeAndWeatherService} from './services/i-time-and-weather.service';
-import {TimeAndWeatherService} from './services/time-and-weather.service';
-import {MockTimeAndWeatherService} from "./services/mock-time-and-weather.service";
+import { isNullOrUndefined } from 'util';
+import { ITimeAndWeatherService } from './services/i-time-and-weather.service';
+import { TimeAndWeatherService } from './services/time-and-weather.service';
+import { MockTimeAndWeatherService } from './services/mock-time-and-weather.service';
 
 export class MyBot {
-
-    private readonly dialogState: StatePropertyAccessor;
-    private dialogs: DialogSet;
 
     private static readonly DIALOG_STATE_PROPERTY = 'dialogState';
     private static readonly PARENT_DIALOG_ID = 'cityInformationDialog';
     private static readonly CHOOSE_CITY_DIALOG_ID = 'chooseCityPrompt';
     private static readonly CITY_OPTIONS = ['Warsaw', 'London', 'New York', 'Berlin', 'Other'];
     private static readonly TYPE_CITY_ID = 'typeCityPrompt';
+
+    private readonly dialogState: StatePropertyAccessor;
+    private dialogs: DialogSet;
 
     private readonly timeAndWeatherService: ITimeAndWeatherService =
         process.env.MOCK_BACKEND === 'true'
@@ -54,13 +54,12 @@ export class MyBot {
                 break;
             default:
                 console.log(turnContext.activity.type);
-                break;
         }
         await this.conversationState.saveChanges(turnContext);
-    };
+    }
 
     private hasUserJoined(turnContext: TurnContext): boolean {
-        return isNullOrUndefined(_.findWhere(turnContext.activity.membersAdded, {id: turnContext.activity.recipient.id}));
+        return isNullOrUndefined(_.findWhere(turnContext.activity.membersAdded, { id: turnContext.activity.recipient.id }));
     }
 
     private sendWelcomeMessage(turnContext: TurnContext) {
@@ -74,26 +73,25 @@ export class MyBot {
     private async respondToUser(turnContext: TurnContext) {
         const dc = await this.dialogs.createContext(turnContext);
         if (!turnContext.responded) {
-            await dc.continueDialog().then((dialogResult) => {
-                if (dialogResult.status === DialogTurnStatus.empty) {
-                    return dc.beginDialog(MyBot.PARENT_DIALOG_ID)
-                        .then((dialogResult) => {
-                            console.log(`New dialog started, current status is ${dialogResult.status}`);
-                        }, (rejected) => {
-                            console.error(rejected);
-                        });
+            const dialogResult = await dc.continueDialog();
+            if (dialogResult.status === DialogTurnStatus.empty) {
+                try {
+                    const newDialogResult = await dc.beginDialog(MyBot.PARENT_DIALOG_ID);
+                    console.log(`New dialog started, current status is ${newDialogResult.status}`);
+                } catch (rejected) {
+                    console.error(rejected);
                 }
-            });
+            }
         }
     }
 
     private async sendCityChoice(context: WaterfallStepContext) {
         return await context.prompt
-        (MyBot.CHOOSE_CITY_DIALOG_ID, {
-            choices: MyBot.CITY_OPTIONS,
-            prompt: 'Please choose one of the most popular cities or choose "Other" if you ask about another.',
-            retryPrompt: 'You did not provide expected value, could you try again?'
-        });
+            (MyBot.CHOOSE_CITY_DIALOG_ID, {
+                choices: MyBot.CITY_OPTIONS,
+                prompt: 'Please choose one of the most popular cities or choose "Other" if you ask about another.',
+                retryPrompt: 'You did not provide expected value, could you try again?'
+            });
     }
 
     private async reactToCityChoice(step: WaterfallStepContext) {
@@ -112,18 +110,17 @@ export class MyBot {
     }
 
     private async sendTimeAndWeatherInformation(context: TurnContext, city: string) {
-        return this.timeAndWeatherService.getTimeAndWeatherFor(city).then(
-            (timeAndWeatherResponse) => {
-                const promises = [
-                    context.sendActivity(`Time for ${city} is: ${timeAndWeatherResponse.time}`),
-                    context.sendActivity(`Detailed weather information for  ${city} is: ${timeAndWeatherResponse.weather}`)
-                ];
-                return Promise.all(promises);
-            }, (error) => {
-                console.error(error);
-                context.sendActivity(`Something went wrong`);
-            }
-        );
+        try {
+            const timeAndWeatherResponse = await this.timeAndWeatherService.getTimeAndWeatherFor(city);
+            const promises = [
+                context.sendActivity(`Time for ${city} is: ${timeAndWeatherResponse.time}`),
+                context.sendActivity(`Detailed weather information for  ${city} is: ${timeAndWeatherResponse.weather}`)
+            ];
+            return Promise.all(promises);
+        } catch (error) {
+            console.error(error);
+            context.sendActivity(`Something went wrong`);
+        }
     }
 
     private getLastFromCityOptions(): string {

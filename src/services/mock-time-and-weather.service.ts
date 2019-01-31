@@ -1,17 +1,18 @@
-import {ITimeAndWeatherService} from './i-time-and-weather.service';
-import {TimeAndWeatherResponse} from './time-and-weather.response';
+import { ITimeAndWeatherService } from './i-time-and-weather.service';
+import { TimeAndWeatherResponse } from './time-and-weather.response';
 
 export class MockTimeAndWeatherService implements ITimeAndWeatherService {
 
     public getTimeAndWeatherFor(city: string): Promise<TimeAndWeatherResponse> {
         const promises = [this.getTimeFor(city), this.getWeatherFor(city)];
-        return Promise.all(promises).then((results: string[]) => {
+        return Promise.all(promises).then(
+            (results: string[]) => {
                 console.log(results);
                 return new TimeAndWeatherResponse(results[0], results[1]);
             },
             (reason) => {
                 console.log(reason);
-                return new TimeAndWeatherResponse('', '' );
+                return new TimeAndWeatherResponse('', '');
             });
     }
 
