@@ -59,7 +59,7 @@ export class MyBot {
     }
 
     private hasUserJoined(turnContext: TurnContext): boolean {
-        return isNullOrUndefined(_.findWhere(turnContext.activity.membersAdded, { id: turnContext.activity.recipient.id }));
+        return isNullOrUndefined(_.findWhere(turnContext.activity.membersAdded, {id: turnContext.activity.recipient.id}));
     }
 
     private sendWelcomeMessage(turnContext: TurnContext) {

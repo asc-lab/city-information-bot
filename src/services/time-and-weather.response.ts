@@ -1,6 +1,6 @@
 export class TimeAndWeatherResponse {
 
-    constructor(private _time: string, private _weather: string) { }
+    constructor(private _time: string, private _weather: string) {}
 
     get time(): string {
         return this._time;
