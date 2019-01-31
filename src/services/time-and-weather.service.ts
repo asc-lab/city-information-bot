@@ -1,39 +1,36 @@
 import * as request from 'request';
 import {ITimeAndWeatherService} from './i-time-and-weather.service';
 import {TimeAndWeatherResponse} from './time-and-weather.response';
-import {Weather} from "../model/Weather";
+import {Weather} from '../model/Weather';
 
 export class TimeAndWeatherService implements ITimeAndWeatherService {
 
-    public getTimeFor(city: string): Promise<string> {
-        return this._getGeoFor(city).then((geometry) => {
-            return this._getTimeFor(geometry);
-        });
+    public async getTimeFor(city: string): Promise<string> {
+        const geometry = await this._getGeoFor(city);
+        return this._getTimeFor(geometry);
     }
 
-    public getWeatherFor(city: string): Promise<string> {
-        return this._getGeoFor(city).then((geometry) => {
-            return this._getWeatherFor(geometry);
-        });
+    public async getWeatherFor(city: string): Promise<string> {
+        const geometry = await this._getGeoFor(city);
+        return this._getWeatherFor(geometry);
     }
 
-    public getTimeAndWeatherFor(city: string): Promise<TimeAndWeatherResponse> {
-        return this._getGeoFor(city).then((geometry) => {
+    public async getTimeAndWeatherFor(city: string): Promise<TimeAndWeatherResponse> {
+        const geometry = await this._getGeoFor(city);
 
-            const promises = [
-                this._getTimeFor(geometry),
-                this._getWeatherFor(geometry)
-            ];
+        const promises = [
+            this._getTimeFor(geometry),
+            this._getWeatherFor(geometry)
+        ];
 
-            return Promise.all(promises).then(
-                (results: string[]) => {
-                    return new TimeAndWeatherResponse(results[0], results[1]);
-                },
-                (reason) => { //error
-                    console.log(reason);
-                    return new TimeAndWeatherResponse('', '');
-                });
-        });
+        return Promise.all(promises).then(
+            (results: string[]) => {
+                return new TimeAndWeatherResponse(results[0], results[1]);
+            },
+            (reason) => { // error
+                console.log(reason);
+                return new TimeAndWeatherResponse('', '');
+            });
     }
 
     private _getGeoFor(city: string): Promise<any> { // FIXME declare a response

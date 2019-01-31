@@ -1,8 +1,8 @@
 export class Weather implements IWeather {
-    clouds: Clouds;
-    main: Main;
-    weather: WeatherEntity[] | null;
-    wind: Wind;
+    public clouds: IClouds;
+    public main: IMain;
+    public weather: IWeatherEntity[] | null;
+    public wind: IWind;
 
     public printInfo = (): string => {
         const msg =
@@ -34,20 +34,20 @@ export class Weather implements IWeather {
 }
 
 export interface IWeather {
-    weather?: (WeatherEntity)[] | null;
-    main: Main;
-    wind: Wind;
-    clouds: Clouds;
+    weather?: IWeatherEntity[] | null;
+    main: IMain;
+    wind: IWind;
+    clouds: IClouds;
 }
 
-export interface WeatherEntity {
+export interface IWeatherEntity {
     id: number;
     main: string;
     description: string;
     icon: string;
 }
 
-export interface Main {
+export interface IMain {
     temp: number;
     pressure: number;
     humidity: number;
@@ -55,11 +55,11 @@ export interface Main {
     temp_max: number;
 }
 
-export interface Wind {
+export interface IWind {
     speed: number;
     deg: number;
 }
 
-export interface Clouds {
+export interface IClouds {
     all: number;
 }
