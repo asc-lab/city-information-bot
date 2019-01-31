@@ -1,7 +1,7 @@
 import * as request from 'request';
-import { ITimeAndWeatherService } from './i-time-and-weather.service';
-import { TimeAndWeatherResponse } from './time-and-weather.response';
-import { Weather } from '../model/Weather';
+import {ITimeAndWeatherService} from './i-time-and-weather.service';
+import {TimeAndWeatherResponse} from './time-and-weather.response';
+import {Weather} from '../model/Weather';
 
 export class TimeAndWeatherService implements ITimeAndWeatherService {
 
@@ -40,7 +40,7 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
             return request.get(
                 geoUrl,
                 {
-                    headers: { 'content-type': 'application/json' }
+                    headers: {'content-type': 'application/json'}
                 },
                 (error, response, body) => {
                     if (error) {
@@ -61,13 +61,13 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
             return request.get(
                 zoneUrl,
                 {
-                    headers: { 'content-type': 'application/json' }
+                    headers: {'content-type': 'application/json'}
                 },
                 (error, response, body) => {
                     if (error) {
                         reject(error);
                     } else {
-                        const time = new Date().toLocaleString('en', { timeZone: JSON.parse(body).timeZoneId });
+                        const time = new Date().toLocaleString('en', {timeZone: JSON.parse(body).timeZoneId});
                         resolve(time);
                     }
                 }
@@ -83,7 +83,7 @@ export class TimeAndWeatherService implements ITimeAndWeatherService {
             return request.get(
                 weatherUrl,
                 {
-                    headers: { 'content-type': 'application/json' }
+                    headers: {'content-type': 'application/json'}
                 },
                 (error, response, body) => {
                     if (error) {

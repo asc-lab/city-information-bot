@@ -1,5 +1,5 @@
-import { ActivityTypes, ConversationState, TurnContext } from 'botbuilder';
-import { StatePropertyAccessor } from 'botbuilder-core';
+import {ActivityTypes, ConversationState, TurnContext} from 'botbuilder';
+import {StatePropertyAccessor} from 'botbuilder-core';
 import {
     ChoicePrompt,
     DialogSet,
@@ -9,10 +9,10 @@ import {
     WaterfallStepContext
 } from 'botbuilder-dialogs';
 import * as _ from 'underscore';
-import { isNullOrUndefined } from 'util';
-import { ITimeAndWeatherService } from './services/i-time-and-weather.service';
-import { TimeAndWeatherService } from './services/time-and-weather.service';
-import { MockTimeAndWeatherService } from './services/mock-time-and-weather.service';
+import {isNullOrUndefined} from 'util';
+import {ITimeAndWeatherService} from './services/i-time-and-weather.service';
+import {TimeAndWeatherService} from './services/time-and-weather.service';
+import {MockTimeAndWeatherService} from './services/mock-time-and-weather.service';
 
 export class MyBot {
 

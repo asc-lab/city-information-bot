@@ -1,5 +1,5 @@
-import { ITimeAndWeatherService } from './i-time-and-weather.service';
-import { TimeAndWeatherResponse } from './time-and-weather.response';
+import {ITimeAndWeatherService} from './i-time-and-weather.service';
+import {TimeAndWeatherResponse} from './time-and-weather.response';
 
 export class MockTimeAndWeatherService implements ITimeAndWeatherService {
 
